@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Saúde Assistida</title>
+<style>
+:root{--bg:#091018;--p:#121c26;--p2:#172431;--t:#edf5f8;--m:#91a0ad;--l:#263542;--g:#64e6a8;--b:#62b5ff;--y:#ffc857;--r:#ff7185}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 5% 0,#173027,#091018 35%);color:var(--t);font:15px system-ui,Segoe UI,Arial}.app{display:flex;min-height:100vh}.side{width:245px;background:#070d13eF;border-right:1px solid var(--l);padding:20px;position:sticky;top:0;height:100vh}.logo{display:inline-grid;place-items:center;width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--g),var(--b));color:#06100b;font-weight:900;margin-right:9px}.brand{display:flex;align-items:center;margin-bottom:25px}.brand small{display:block;color:var(--m)}nav button{display:block;width:100%;border:0;background:none;color:var(--m);padding:12px;border-radius:10px;text-align:left;cursor:pointer;margin:5px 0}nav button.active,nav button:hover{background:var(--p2);color:var(--t)}main{flex:1;min-width:0}.top{height:68px;border-bottom:1px solid var(--l);padding:0 28px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#091018dd;backdrop-filter:blur(12px);z-index:5}.top span{color:var(--m)}.content{max-width:1450px;margin:auto;padding:28px}.tab{display:none}.tab.active{display:block}.hero{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:24px}.ey{color:var(--g);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.hero h1{font-size:clamp(26px,4vw,46px);line-height:1;margin:7px 0 10px}.lead,.muted{color:var(--m)}.grid{display:grid;gap:15px}.g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:repeat(2,1fr)}.card{background:linear-gradient(145deg,#131e28,#0e161e);border:1px solid var(--l);border-radius:17px;padding:18px;box-shadow:0 15px 40px #0005}.label{color:var(--m);font-size:12px}.value{font-size:26px;font-weight:900;margin:4px 0}.sub,.small{font-size:12px;color:var(--m)}.badge{display:inline-block;padding:5px 9px;border-radius:99px;background:#173327;color:var(--g);font-size:12px;font-weight:800}.blue{background:#132a40;color:var(--b)}.yellow{background:#3a2d13;color:var(--y)}.btn{border:1px solid var(--l);background:var(--p2);color:var(--t);padding:9px 13px;border-radius:10px;cursor:pointer}.primary{background:var(--g);border-color:var(--g);color:#06120c;font-weight:800}.danger{color:var(--r)}.section{display:flex;justify-content:space-between;align-items:center;margin:28px 0 13px}.section h2{margin:0;font-size:20px}.progress{height:10px;background:#202b36;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--g),var(--b));transition:.3s}.days{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.day{padding:10px;min-height:105px;border:1px solid var(--l);border-radius:13px;background:#101820}.day b{display:block;font-size:13px}.day span{font-size:10px;color:var(--g);font-weight:800}.day p{font-size:11px;color:var(--m)}.form{display:grid;grid-template-columns:repeat(6,1fr);gap:9px}.field label{display:block;font-size:11px;color:var(--m);margin-bottom:4px}.field input,.field select,.field textarea{width:100%;background:#0a1219;color:var(--t);border:1px solid var(--l);padding:9px;border-radius:9px}.table{overflow:auto}.table table{width:100%;border-collapse:collapse}.table th,.table td{padding:10px;border-bottom:1px solid var(--l);text-align:left;white-space:nowrap;font-size:13px}.table th{font-size:11px;color:var(--m);text-transform:uppercase}.chart{height:350px}.chart svg{width:100%;height:100%}.notice{padding:13px 15px;border-left:3px solid var(--g);background:#102019;border-radius:9px}.food{border:1px solid var(--l);border-radius:14px;overflow:hidden}.food h3{margin:0;padding:13px;background:#121d27;font-size:15px}.meal{padding:11px;border-top:1px solid var(--l)}.meal span{display:block;color:var(--m);font-size:12px}.checks{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.check{padding:10px;border:1px solid var(--l);border-radius:10px;background:#101820}.check input{accent-color:var(--g)}.data-box{margin-top:24px;padding-top:18px;border-top:1px solid var(--l)}.data-title{font-weight:800;margin-bottom:9px}.data-btn{display:block;width:100%;margin:7px 0;padding:9px 10px;border-radius:9px;border:1px solid var(--l);background:#101a23;color:var(--t);cursor:pointer;text-align:left}.data-btn:hover{background:#1a2936}.data-btn.save{border-color:#286b4d;background:#10291e;color:var(--g)}.data-box small{display:block;color:var(--m);font-size:10px;line-height:1.4;margin-top:9px}
+
+/* Calendar Styles */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal-header{text-align:center;font-weight:800;color:var(--m);font-size:11px;padding:6px}
+.cal-cell{min-height:85px;border:1px solid var(--l);border-radius:10px;background:#101820;padding:6px;cursor:pointer;position:relative;transition:.2s}
+.cal-cell:hover{border-color:var(--g);background:#14222c}
+.cal-cell.empty{background:transparent;border:0;cursor:default}
+.cal-day-num{font-weight:800;font-size:13px;margin-bottom:3px;display:flex;justify-content:space-between;align-items:center}
+.cal-badge{font-size:8px;padding:2px 4px;border-radius:4px;background:#173327;color:var(--g)}
+.cal-info{font-size:10px;color:var(--m);overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+
+/* Modal Overlay */
+.modal-overlay{position:fixed;inset:0;background:#0008;backdrop-filter:blur(4px);z-index:99;display:none;place-items:center;padding:15px}
+.modal-overlay.open{display:grid}
+.modal-card{background:var(--p);border:1px solid var(--l);border-radius:18px;width:100%;max-width:520px;padding:20px;box-shadow:0 20px 50px #000;max-height:90vh;overflow-y:auto}
+
+/* Workout info card styles */
+.info-section-box{background:#101820;border:1px solid var(--l);border-radius:14px;padding:16px;margin-bottom:15px}
+.info-section-box h4{margin:0 0 10px 0;color:var(--g);font-size:16px}
+.info-section-box p{margin:0 0 10px 0;color:var(--m);font-size:13px}
+
+@media(max-width:1050px){.g4{grid-template-columns:repeat(2,1fr)}.form{grid-template-columns:repeat(3,1fr)}.days{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.app{display:block}.side{width:auto;height:auto;position:static;border-right:0;border-bottom:1px solid var(--l);padding:15px}nav{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}nav button{text-align:center;font-size:11px;padding:10px 6px}.hero{flex-direction:column;align-items:flex-start}.content{padding:14px}.g2,.g3,.g4{grid-template-columns:1fr}.form{grid-template-columns:1fr}.days{grid-template-columns:1fr}.checks{grid-template-columns:1fr 1fr}.top{padding:0 14px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <span class="logo">85</span>
+      <div><b>Saúde Assistida</b><small>evolução • consistência</small></div>
+    </div>
+    <nav>
+      <button class="active" data-tab="home">🏠 Visão geral</button>
+      <button data-tab="diary">📅 Diário</button>
+      <button data-tab="users">👥 Usuários</button>
+      <button data-tab="train">🥊 Treinos</button>
+      <button data-tab="evo">📈 Evolução</button>
+      <button data-tab="food">🥗 Nutrição</button>
+    </nav>
+    <div class="data-box">
+      <div class="data-title">💾 Dados</div>
+      <button class="data-btn save" onclick="saveBackup()">💾 Salvar dados</button>
+      <button class="data-btn" onclick="document.getElementById('importFile').click()">📥 Importar JSON</button>
+      <button class="data-btn" onclick="exportJSON()">📤 Exportar JSON</button>
+      <input id="importFile" type="file" accept=".json,application/json" hidden onchange="importJSON(event)">
+      <small>Exporte seus dados para usar em outro dispositivo.</small>
+    </div>
+  </aside>
+
+  <main>
+    <header class="top">
+      <span id="title">Visão geral</span>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div style="display:flex; align-items:center; gap:4px;">
+          <span style="font-size:11px; color:var(--m);">Usuário:</span>
+          <select id="headerUserSelect" onchange="switchUserFromHeader(this.value)" style="background:#0a1219; color:var(--t); border:1px solid var(--l); padding:4px 8px; border-radius:8px; font-weight:700; cursor:pointer; font-size:12px;"></select>
+        </div>
+        <span style="font-size:12px;"><b id="currentUserName">Kevin</b> · <span id="clock"></span></span>
+      </div>
+    </header>
+
+    <div class="content">
+      <section id="home" class="tab active">
+        <div class="hero">
+          <div>
+            <div class="ey">Projeto 85</div>
+            <h1>Continuar andando.</h1>
+            <p class="lead">Painel automático: novos pesos, treinos e alimentação atualizam os indicadores.</p>
+          </div>
+          <button class="btn primary" onclick="tab('evo')">Registrar avaliação</button>
+        </div>
+        <div class="grid g4">
+          <div class="card"><div class="label">Peso atual</div><div class="value" id="dw">100,90 kg</div><div class="sub" id="dwd">16/08/2026</div></div>
+          <div class="card"><div class="label">Meta</div><div class="value" id="targetWeightVal">85,00 kg</div><div class="sub" id="dr">15,90 kg restantes</div></div>
+          <div class="card"><div class="label">Ritmo real</div><div class="value" id="drr">—</div><div class="sub">meta −0,50 kg/sem</div></div>
+          <div class="card"><div class="label">Previsão</div><div class="value" id="df">Mar/Abr</div><div class="sub">conforme registros</div></div>
+        </div>
+        <div class="section"><h2>Progresso até a meta</h2><span class="badge" id="dpct">0%</span></div>
+        <div class="card"><div class="progress"><i id="dp"></i></div><p class="small" id="status">Ponto inicial desta fase.</p></div>
+
+        <div class="section"><h2>Indicadores atuais</h2></div>
+        <div class="grid g3">
+          <div class="card"><div class="label">Treinos na semana</div><div class="value" id="dtrain">0/5</div><div class="sub">lutas + casa</div></div>
+          <div class="card"><div class="label">Refeições marcadas</div><div class="value" id="dmeal">0/7</div><div class="sub">hoje</div></div>
+          <div class="card"><div class="label">% gordura</div><div class="value" id="dfat">32,17%</div><div class="sub" id="dlean">massa magra 68,44 kg</div></div>
+        </div>
+
+        <div class="section"><h2>Rotina semanal</h2></div>
+        <div class="days">
+          <div class="day"><b>Seg</b><span>FACULDADE</span><p>Rotina normal</p></div>
+          <div class="day"><b>Ter</b><span>MUAY THAI + BIKE</span><p>Luta</p></div>
+          <div class="day"><b>Qua</b><span>BOXE + BIKE</span><p>Luta</p></div>
+          <div class="day"><b>Qui</b><span>MUAY THAI + BIKE</span><p>Luta</p></div>
+          <div class="day"><b>Sex</b><span>FACULDADE</span><p>Rotina normal</p></div>
+          <div class="day"><b>Sáb</b><span>CASA 90 MIN</span><p>Condicionamento</p></div>
+          <div class="day"><b>Dom</b><span>CASA 90 MIN</span><p>Força + técnica</p></div>
+        </div>
+      </section>
+
+      <!-- DIARY / CALENDAR TAB -->
+      <section id="diary" class="tab">
+        <div class="hero">
+          <div>
+            <div class="ey">Diário de Bordo</div>
+            <h1>Calendário interativo.</h1>
+            <p class="lead">Acompanhe humor, sono, anotações e histórico diário. Clique em qualquer dia para ver o resumo completo.</p>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <button class="btn" onclick="changeMonth(-1)">◀ Anterior</button>
+            <b id="calMonthYearLabel" style="font-size:16px; min-width:130px; text-align:center;">Agosto 2026</b>
+            <button class="btn" onclick="changeMonth(1)">Próximo ▶</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="cal-grid" style="margin-bottom:6px;">
+            <div class="cal-header">Seg</div>
+            <div class="cal-header">Ter</div>
+            <div class="cal-header">Qua</div>
+            <div class="cal-header">Qui</div>
+            <div class="cal-header">Sex</div>
+            <div class="cal-header">Sáb</div>
+            <div class="cal-header">Dom</div>
+          </div>
+          <div class="cal-grid" id="calDaysGrid"></div>
+        </div>
+      </section>
+
+      <section id="users" class="tab">
+        <div class="hero">
+          <div>
+            <div class="ey">Cadastro</div>
+            <h1>Usuários.</h1>
+            <p class="lead">Cadastre pessoas diferentes e selecione quem terá os dados exibidos nos dashboards.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="form" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">
+            <div class="field"><label>Nome</label><input id="un" placeholder="Ex.: Ariane"></div>
+            <div class="field"><label>Idade</label><input id="ua" type="number" placeholder="26"></div>
+            <div class="field"><label>Altura (m)</label><input id="uh" type="number" step=".01" placeholder="1,83"></div>
+            <div class="field"><label>Sexo</label><select id="us"><option value="M">Masculino</option><option value="F">Feminino</option></select></div>
+            <div class="field"><label>Meta de Peso (kg)</label><input id="ugw" type="number" step=".1" placeholder="85.0"></div>
+          </div>
+          <br><button class="btn primary" onclick="addUser()">Cadastrar usuário</button>
+        </div>
+        <div class="section"><h2>Usuários cadastrados</h2></div>
+        <div class="grid g3" id="userCards"></div>
+      </section>
+
+      <section id="train" class="tab">
+        <div class="hero">
+          <div>
+            <div class="ey">Treino & Biblioteca</div>
+            <h1>Registrar treino e orientações.</h1>
+            <p class="lead">Adicione seus treinos. Caso precise corrigir ou adicionar múltiplos blocos no mesmo dia, você pode excluir registros incorretos diretamente na tabela abaixo.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="form">
+            <div class="field"><label>Data</label><input id="td" type="date"></div>
+            <div class="field"><label>Treino</label><select id="tt"><option>Muay Thai</option><option>Boxe</option><option>Casa — sábado</option><option>Casa — domingo</option><option>Treino Extra (Corda & Pernas)</option><option>Sem treino</option></select></div>
+            <div class="field"><label>Minutos</label><input id="tm" type="number" value="90"></div>
+            <div class="field"><label>Bicicleta</label><select id="tb"><option>Não</option><option>Sim</option></select></div>
+            <div class="field"><label>Intensidade</label><select id="ti"><option>Leve</option><option>Moderada</option><option>Alta</option></select></div>
+            <div class="field"><label>&nbsp;</label><button class="btn primary" onclick="addTrain()">Salvar treino</button></div>
+          </div>
+        </div>
+        <div class="section"><h2>Histórico de Treinos</h2><span class="badge" id="tw">0/5</span></div>
+        <div class="card table" id="trainTable"></div>
+        
+        <div class="section"><h2>Biblioteca de Treino — Informações do Documento</h2><span class="badge yellow">Guia Completo</span></div>
+        <p class="muted" style="margin-bottom:15px;">Selecione o bloco correspondente para consultar os detalhes de execução dos exercícios:</p>
+        
+        <div style="display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap;">
+          <button class="btn primary" onclick="switchVideoBlock('sabado')" id="btnSab">Sábado (Casa)</button>
+          <button class="btn" onclick="switchVideoBlock('domingo')" id="btnDom">Domingo (Força)</button>
+          <button class="btn" onclick="switchVideoBlock('extra')" id="btnExt">Extra (Corda & Pernas)</button>
+        </div>
+
+        <div id="videoBlockContent"></div>
+      </section>
+
+      <section id="evo" class="tab">
+        <div class="hero">
+          <div>
+            <div class="ey">Evolução corporal & Déficit Calórico Automático</div>
+            <h1>Registrar peso e composição.</h1>
+            <p class="lead">Informe a data e o peso diariamente. Se deixar os campos de composição corporal vazios, o sistema calculará e reaproveitará os dados proporcionalmente com base na sua última avaliação completa.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="form">
+            <div class="field"><label>Data</label><input id="ed" type="date"></div>
+            <div class="field"><label>Peso (kg)</label><input id="ew" type="number" step=".01" placeholder="100,90"></div>
+            <div class="field"><label>IMC (opcional)</label><input id="eb" type="number" step=".01" placeholder="Automático"></div>
+            <div class="field"><label>% gordura (finais de semana)</label><input id="efp" type="number" step=".01" placeholder="Ex: 32,17"></div>
+            <div class="field"><label>Gordura (kg)</label><input id="efk" type="number" step=".01" placeholder="Opcional"></div>
+            <div class="field"><label>Massa magra</label><input id="el" type="number" step=".01" placeholder="Opcional"></div>
+          </div>
+          <p class="small">Preencha apenas o peso no dia a dia; complete os dados de gordura e massa magra aos finais de semana.</p>
+          <button class="btn primary" onclick="addEval()">Salvar avaliação</button>
+        </div>
+
+        <div class="section"><h2>Histórico completo</h2><span class="badge blue" id="ec">3 avaliações</span></div>
+        <div class="card table" id="evalTable"></div>
+
+        <div class="section"><h2>Real × meta de −0,50 kg/semana</h2></div>
+        <div class="card chart" id="chart"></div>
+
+        <div class="grid g4" style="margin-top:25px;">
+          <div class="card"><div class="label">Variação total</div><div class="value" id="sc">—</div></div>
+          <div class="card"><div class="label">Ritmo real</div><div class="value" id="sr">—</div></div>
+          <div class="card"><div class="label">Restante para meta</div><div class="value" id="srem">—</div></div>
+          <div class="card"><div class="label">Previsão estimada</div><div class="value" id="sf">—</div></div>
+        </div>
+      </section>
+
+      <section id="food" class="tab">
+        <div class="hero">
+          <div>
+            <div class="ey">Nutrição</div>
+            <h1>Cardápio + registros & Desvios.</h1>
+            <p class="lead">Base: arroz 80 g, feijão 80 g, proteína 100 g, legumes/verduras e whey 30 g. Registre também observações de desvios.</p>
+          </div>
+        </div>
+        <div class="grid g3">
+          <div class="card"><div class="label">Base almoço/jantar</div><div class="value">80/80/100</div><div class="sub">arroz / feijão / proteína</div></div>
+          <div class="card"><div class="label">Whey</div><div class="value">30 g</div><div class="sub">diário</div></div>
+          <div class="card"><div class="label">Proteína</div><div class="value">≤ R$150</div><div class="sub">orçamento informado</div></div>
+        </div>
+        <div class="section"><h2>Aderência de hoje</h2><span class="badge blue" id="mp">0%</span></div>
+        <div class="card"><div class="checks" id="checks"></div></div>
+        
+        <div class="section"><h2>Registro de Desvios & Observações Diárias</h2><span class="badge yellow">Novo Recurso</span></div>
+        <div class="card" style="margin-bottom:20px;">
+          <p class="muted" style="margin-top:0;">Clique no botão <b>"OBS"</b> de cada refeição abaixo para registrar quando saiu da rotina, detalhando alimentos e quantidades consumidas.</p>
+          <div id="mealObsContainer" style="display:grid; gap:10px; margin-top:12px;"></div>
+        </div>
+
+        <div class="section"><h2>Cardápio semanal</h2></div>
+        <div class="grid g3" id="menu"></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL FOR MEAL OBS EDITING -->
+<div class="modal-overlay" id="mealObsModal" onclick="if(event.target===this)closeMealObsModal()">
+  <div class="modal-card">
+    <h3 id="mealObsModalTitle" style="margin-top:0; margin-bottom:12px; color:var(--g);">Observação / Desvio da Refeição</h3>
+    <input type="hidden" id="mealObsKey">
+    <div class="field" style="margin-bottom:12px;">
+      <label>Descreva o desvio ou observação (ex: "feijoada 300g")</label>
+      <textarea id="mealObsText" rows="3" placeholder="Descreva os alimentos e quantidades..." style="width:100%;background:#0a1219;color:var(--t);border:1px solid var(--l);padding:9px;border-radius:9px;"></textarea>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+      <span class="small muted">O plano original continua válido em paralelo.</span>
+      <div style="display:flex; gap:8px;">
+        <button class="btn" onclick="closeMealObsModal()">Cancelar</button>
+        <button class="btn primary" onclick="saveMealObs()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FOR DIARY DAY EDITING -->
+<div class="modal-overlay" id="diaryModal" onclick="if(event.target===this)closeDiaryModal()">
+  <div class="modal-card">
+    <h3 id="modalDateTitle" style="margin-top:0; margin-bottom:12px; color:var(--g);">Resumo & Diário do Dia</h3>
+    <input type="hidden" id="modalDateKey">
+    
+    <div id="modalDaySummary" style="background:#101820; border:1px solid var(--l); border-radius:10px; padding:12px; margin-bottom:12px; font-size:12px; color:var(--m);"></div>
+
+    <div style="font-weight:800; font-size:12px; margin-bottom:6px; color:var(--t);">Editar Humor, Sono & Notas</div>
+    <div class="form" style="grid-template-columns:1fr 1fr; margin-bottom:10px;">
+      <div class="field">
+        <label>Humor</label>
+        <select id="modalMood">
+          <option value="😁">😁 Ótimo</option>
+          <option value="🙂" selected>🙂 Normal</option>
+          <option value="😴">😴 Cansado</option>
+          <option value="🤕">🤕 Dor</option>
+          <option value="🛑">🛑 Descanso</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Sono (horas)</label>
+        <input id="modalSleep" type="number" step="0.5" placeholder="7.5">
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:12px;">
+      <label>Anotações livres</label>
+      <textarea id="modalNotes" rows="2" placeholder="Como foi o dia..." style="width:100%;background:#0a1219;color:var(--t);border:1px solid var(--l);padding:9px;border-radius:9px;"></textarea>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+      <span class="small muted">Salvo ao clicar no botão.</span>
+      <div style="display:flex; gap:8px;">
+        <button class="btn" onclick="closeDiaryModal()">Fechar</button>
+        <button class="btn primary" onclick="saveDiaryDay()">Salvar dia</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const K={e:'sa_evals',t:'sa_train',m:'sa_meals',u:'sa_users',d:'sa_diary',mo:'sa_meal_obs'};
+const seed=[{date:'2026-04-03',w:100.35,b:29.97,f:27.69,fk:27.79,l:72.56},{date:'2026-04-12',w:101.05,b:30.17,f:31.63,fk:31.96,l:69.09},{date:'2026-08-16',w:100.90,b:30.13,f:32.17,fk:32.46,l:68.44}];
+const $=id=>document.getElementById(id),get=(k,d)=>JSON.parse(localStorage.getItem(k)||'null')??d,set=(k,v)=>localStorage.setItem(k,JSON.stringify(v)),fmt=(n,d=2)=>Number(n).toFixed(d).replace('.',','),br=s=>new Date(s+'T12:00:00').toLocaleDateString('pt-BR'),today=()=>new Date().toISOString().slice(0,10);
+
+function tab(id){
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  $(id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.tab==id));
+  $('title').textContent={home:'Visão geral',diary:'Diário',users:'Usuários',train:'Treino & Biblioteca',evo:'Evolução',food:'Nutrição'}[id];
+  refresh();
+  if(id==='diary') renderCalendar();
+}
+document.querySelectorAll('nav button').forEach(x=>x.onclick=()=>tab(x.dataset.tab));
+
+function users(){
+  let u=get(K.u,null);
+  if(!u){
+    u=[{id:'kevin',name:'Kevin',age:26,height:1.83,sex:'M',goalWeight:85,rate:.5}];
+    set(K.u,u);
+  }
+  return u;
+}
+
+function currentUser(){
+  let id=localStorage.getItem('sa_current_user')||users()[0].id;
+  let u=users().find(x=>x.id===id)||users()[0];
+  localStorage.setItem('sa_current_user',u.id);
+  return u;
+}
+
+function key(base){return base+'_'+currentUser().id}
+
+function evals(){
+  let cu = currentUser();
+  let a=get(key(K.e),null);
+  if(!a && cu.id==='kevin'){a=seed;set(key(K.e),a)}
+  return (a||[]).sort((a,b)=>a.date.localeCompare(b.date));
+}
+
+function last(){
+  let ev = evals();
+  if(ev.length > 0) return ev.at(-1);
+  let cu = currentUser();
+  return {date: today(), w: cu.goalWeight ? cu.goalWeight + 15 : 100, b: 30, f: 30, fk: 30, l: 70};
+}
+
+function addUser(){
+  let name=$('un').value.trim(), age=+$('ua').value||0, height=+$('uh').value||1.70, sex=$('us').value, gw=+$('ugw').value||85;
+  if(!name)return alert('Informe o nome.');
+  let id=name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g, '-')+'-'+Date.now();
+  let a=users();
+  a.push({id,name,age,height,sex,goalWeight:gw,rate:.5});
+  set(K.u,a);
+  localStorage.setItem('sa_current_user',id);
+  $('un').value=''; $('ua').value=''; $('uh').value=''; $('ugw').value='';
+  renderUsers();
+  refresh();
+  alert('Usuário cadastrado e selecionado.');
+}
+
+function selectUser(id){
+  localStorage.setItem('sa_current_user',id);
+  refresh();
+  tab('home');
+}
+
+function switchUserFromHeader(id){
+  localStorage.setItem('sa_current_user',id);
+  refresh();
+}
+
+function renderUsers(){
+  let uList = users();
+  let cu = currentUser();
+  
+  let sel = $('headerUserSelect');
+  if(sel){
+    sel.innerHTML = uList.map(u=>`<option value="${u.id}" ${u.id===cu.id?'selected':''}>${u.name}</option>`).join('');
+  }
+
+  $('userCards').innerHTML=uList.map(u=>`<div class="card"><span class="badge ${u.id===cu.id?'':'blue'}">${u.id===cu.id?'ATIVO':'USUÁRIO'}</span><div class="value">${u.name}</div><div class="sub">${u.age||'—'} anos · ${fmt(u.height)} m · Meta: ${fmt(u.goalWeight||85)} kg</div><br><button class="btn ${u.id===cu.id?'':'primary'}" onclick="selectUser('${u.id}')">${u.id===cu.id?'Selecionado':'Selecionar'}</button></div>`).join('');
+  $('currentUserName').textContent=cu.name;
+}
+
+function addEval(){
+  let d=$('ed').value, w=+$('ew').value;
+  if(!d||!w)return alert('Informe data e peso.');
+  let cu = currentUser();
+  let h = cu.height || 1.83;
+  
+  let currentEvals = evals();
+  let lastEval = currentEvals.length > 0 ? currentEvals.at(-1) : null;
+  
+  let b = +$('eb').value || (w/(h*h));
+  let f = +$('efp').value || (lastEval ? lastEval.f : null);
+  let fk = +$('efk').value || (f != null ? (w * (f / 100)) : (lastEval ? lastEval.fk : null));
+  let l = +$('el').value || (fk != null ? (w - fk) : (lastEval ? lastEval.l : null));
+
+  let a = currentEvals.filter(x=>x.date!=d);
+  a.push({date:d, w, b, f, fk, l});
+  
+  set(key(K.e),a);
+  refresh();
+  alert('Avaliação salva com sucesso!');
+}
+
+function addTrain(){
+  let a=get(key(K.t),[]);
+  a.push({id: Date.now().toString(), date:$('td').value||today(), type:$('tt').value, min:+$('tm').value||90, bike:$('tb').value, int:$('ti').value});
+  set(key(K.t),a);
+  refresh();
+  alert('Treino registrado com sucesso!');
+}
+
+function deleteTrain(id){
+  if(!confirm('Deseja realmente excluir este treino?')) return;
+  let a = get(key(K.t),[]);
+  a = a.filter(x => x.id !== id && x.date + '_' + x.min !== id);
+  set(key(K.t), a);
+  refresh();
+}
+
+function week(d){let x=new Date(d+'T12:00:00'),n=(x.getDay()+6)%7;x.setDate(x.getDate()-n);x.setHours(0,0,0,0);return x}
+function thisWeek(d){let x=new Date(d+'T12:00:00'),s=week(today());return x>=s&&x<s.getTime()+7*864e5}
+
+const mealNames=[['w','Whey 30 g'],['b','Café da manhã'],['a','Almoço'],['l','Lanche'],['j','Jantar'],['f','Fruta'],['v','Legumes/verduras']];
+
+function saveMeals(){
+  let a=get(key(K.m),{}),o={};
+  document.querySelectorAll('#checks input').forEach(x=>o[x.dataset.x]=x.checked);
+  a[today()]=o;
+  set(key(K.m),a);
+  refresh();
+}
+
+function renderMeals(){
+  let o=get(key(K.m),{})[today()]||{};
+  $('checks').innerHTML=mealNames.map(x=>`<label class="check"><input type="checkbox" data-x="${x[0]}" ${o[x[0]]?'checked':''} onchange="saveMeals()"> ${x[1]}</label>`).join('');
+  let n=Object.values(o).filter(Boolean).length;
+  $('mp').textContent=Math.round(n/7*100)+'%';
+  $('dmeal').textContent=n+'/7';
+
+  renderMealObsSection();
+}
+
+function renderMealObsSection(){
+  let allObs = get(key(K.mo), {});
+  let todayObs = allObs[today()] || {};
+  const relevantMeals = [{key:'b', name:'Café da manhã'}, {key:'a', name:'Almoço'}, {key:'l', name:'Lanche'}, {key:'j', name:'Jantar'}];
+
+  let html = '';
+  relevantMeals.forEach(m => {
+    let obsVal = todayObs[m.key] || '';
+    html += `
+      <div style="background:#101820; border:1px solid var(--l); border-radius:10px; padding:10px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <b style="color:var(--t); font-size:13px;">${m.name}</b>
+          <div style="font-size:11px; color:var(--m); margin-top:2px;">
+            ${obsVal ? `<span style="color:var(--y);">⚠️ Desvio:</span> ${obsVal}` : '<span class="muted">Seguindo o plano.</span>'}
+          </div>
+        </div>
+        <button class="btn ${obsVal ? 'primary' : ''}" onclick="openMealObsModal('${m.key}', '${m.name}')" style="padding:6px 10px; font-size:12px;">OBS</button>
+      </div>
+    `;
+  });
+  $('mealObsContainer').innerHTML = html;
+}
+
+function openMealObsModal(mealKey, mealName){
+  $('mealObsKey').value = mealKey;
+  $('mealObsModalTitle').textContent = `Desvio — ${mealName}`;
+  let allObs = get(key(K.mo), {});
+  let todayObs = allObs[today()] || {};
+  $('mealObsText').value = todayObs[mealKey] || '';
+  $('mealObsModal').classList.add('open');
+}
+
+function closeMealObsModal(){ $('mealObsModal').classList.remove('open'); }
+
+function saveMealObs(){
+  let mealKey = $('mealObsKey').value;
+  let text = $('mealObsText').value.trim();
+  let allObs = get(key(K.mo), {});
+  if(!allObs[today()]) allObs[today()] = {};
+  if(text){ allObs[today()][mealKey] = text; } else { delete allObs[today()][mealKey]; }
+  set(key(K.mo), allObs);
+  closeMealObsModal();
+  renderMealObsSection();
+  alert('Observação salva!');
+}
+
+function renderE(){
+  let a=evals();
+  $('ec').textContent=a.length+' avaliações';
+  $('evalTable').innerHTML='<table><tr><th>Data</th><th>Peso</th><th>IMC</th><th>% gordura</th><th>Gordura</th><th>Massa magra</th></tr>'+a.slice().reverse().map(x=>`<tr><td>${br(x.date)}</td><td><b>${fmt(x.w)} kg</b></td><td>${fmt(x.b)}</td><td>${x.f==null?'—':fmt(x.f)+'%'}</td><td>${x.fk==null?'—':fmt(x.fk)+' kg'}</td><td>${x.l==null?'—':fmt(x.l)+' kg'}</td></tr>`).join('')+'</table>';
+}
+
+function renderT(){
+  let a=get(key(K.t),[]),n=a.filter(x=>thisWeek(x.date)&&x.type!=='Sem treino').length;
+  $('tw').textContent=n+'/5';
+  $('dtrain').textContent=n+'/5';
+  $('trainTable').innerHTML=a.length?'<table><tr><th>Data</th><th>Treino</th><th>Min</th><th>Bike</th><th>Int.</th><th>Ação</th></tr>'+a.slice().reverse().map(x=>`<tr><td>${br(x.date)}</td><td>${x.type}</td><td>${x.min}</td><td>${x.bike}</td><td>${x.int}</td><td><button class="btn danger" onclick="deleteTrain('${x.id||(x.date+'_'+x.min)}') " style="padding:4px 8px; font-size:11px;">🗑️ Excluir</button></td></tr>`).join('')+'</table>':'<span class="muted small">Nenhum treino registrado.</span>';
+}
+
+let calYear = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+
+function changeMonth(dir){
+  calMonth += dir;
+  if(calMonth > 11){ calMonth = 0; calYear++; }
+  else if(calMonth < 0){ calMonth = 11; calYear--; }
+  renderCalendar();
+}
+
+function renderCalendar(){
+  const monthNames = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+  $('calMonthYearLabel').textContent = `${monthNames[calMonth]} ${calYear}`;
+  
+  const firstDayIndex = (new Date(calYear, calMonth, 1).getDay() + 6) % 7;
+  const totalDays = new Date(calYear, calMonth + 1, 0).getDate();
+  
+  const diaryData = get(key(K.d), {});
+  const trainData = get(key(K.t), []);
+  const evalData = evals();
+  const mealData = get(key(K.m), {});
+  
+  let html = '';
+  for(let i = 0; i < firstDayIndex; i++){ html += `<div class="cal-cell empty"></div>`; }
+  
+  for(let day = 1; day <= totalDays; day++){
+    let mStr = String(calMonth + 1).padStart(2,'0');
+    let dStr = String(day).padStart(2,'0');
+    let dateStr = `${calYear}-${mStr}-${dStr}`;
+    
+    let dEntry = diaryData[dateStr] || {};
+    let tEntry = trainData.filter(x => x.date === dateStr);
+    let eEntry = evalData.find(x => x.date === dateStr);
+    let mEntry = mealData[dateStr] || {};
+    let mealsCount = Object.values(mEntry).filter(Boolean).length;
+    
+    let infoSnippet = [];
+    if(dEntry.mood) infoSnippet.push(`${dEntry.mood}`);
+    if(tEntry.length > 0) infoSnippet.push(`🥊 ${tEntry.reduce((acc,curr)=>acc+(Number(curr.min)||0),0)}m`);
+    if(eEntry) infoSnippet.push(`⚖️ ${fmt(eEntry.w)}kg`);
+    if(mealsCount > 0) infoSnippet.push(`🥗 ${mealsCount}/7`);
+    
+    html += `
+      <div class="cal-cell" onclick="openDiaryModal('${dateStr}')">
+        <div class="cal-day-num">
+          <span>${day}</span>
+          ${dEntry.mood ? `<span class="cal-badge">${dEntry.mood}</span>` : ''}
+        </div>
+        <div class="cal-info">${infoSnippet.join(' • ')}</div>
+      </div>
+    `;
+  }
+  $('calDaysGrid').innerHTML = html;
+}
+
+function openDiaryModal(dateStr){
+  $('modalDateKey').value = dateStr;
+  $('modalDateTitle').textContent = `Diário — ${br(dateStr)}`;
+  
+  const diaryData = get(key(K.d), {});
+  const entry = diaryData[dateStr] || {};
+  $('modalMood').value = entry.mood || '🙂';
+  $('modalSleep').value = entry.sleep || '';
+  $('modalNotes').value = entry.notes || '';
+  
+  const trainData = get(key(K.t), []).filter(x => x.date === dateStr);
+  const evalData = evals().find(x => x.date === dateStr);
+  const mealData = get(key(K.m), {})[dateStr] || {};
+  const mealObsData = get(key(K.mo), {})[dateStr] || {};
+  const mealsCount = Object.values(mealData).filter(Boolean).length;
+  
+  let summaryHtml = `<div><b>🥊 Treinos:</b> ${trainData.length > 0 ? trainData.map(t=>`${t.type} (${t.min} min)`).join(', ') : 'Nenhum'}</div>`;
+  summaryHtml += `<div style="margin-top:4px;"><b>⚖️ Peso:</b> ${evalData ? fmt(evalData.w)+' kg' : 'Não registrado'}</div>`;
+  summaryHtml += `<div style="margin-top:4px;"><b>🥗 Refeições:</b> ${mealsCount}/7 marcadas</div>`;
+  
+  if(Object.keys(mealObsData).length > 0){
+    summaryHtml += `<div style="margin-top:4px; color:var(--y);">⚠️ Desvios registrados.</div>`;
+  }
+  
+  $('modalDaySummary').innerHTML = summaryHtml;
+  $('diaryModal').classList.add('open');
+}
+
+function closeDiaryModal(){ $('diaryModal').classList.remove('open'); }
+
+function saveDiaryDay(){
+  let dateStr = $('modalDateKey').value;
+  let diaryData = get(key(K.d), {});
+  diaryData[dateStr] = { mood: $('modalMood').value, sleep: parseFloat($('modalSleep').value) || 0, notes: $('modalNotes').value.trim() };
+  set(key(K.d), diaryData);
+  closeDiaryModal();
+  renderCalendar();
+  alert('Salvo!');
+}
+
+function switchVideoBlock(blockKey){
+  ['btnSab','btnDom','btnExt'].forEach(id=>{ let btn = $(id); if(btn) btn.className = 'btn'; });
+  if(blockKey==='sabado') $('btnSab').className='btn primary';
+  if(blockKey==='domingo') $('btnDom').className='btn primary';
+  if(blockKey==='extra') $('btnExt').className='btn primary';
+  
+  const blocks = {
+    sabado:[
+      {title:'1. Aquecimento — 10 min', items:['Caminhada/trote no lugar', 'Corda leve', 'Mobilidade de quadril, tornozelo, ombros']},
+      {title:'2. Corda — 8 min', items:['8 × 40 s pulando + 20 s descanso']},
+      {title:'3. Shadowboxing — 12 min', items:['Round 1 — Boxe: jab + direto + defesa', 'Round 2 — Muay Thai: socos + low kick + teep']}
+    ],
+    domingo:[
+      {title:'1. Circuito de força — 35 min', items:['Agachamento — 15 reps', 'Afundo reverso — 10/perna', 'Ponte de glúteo — 20 reps']}
+    ],
+    extra:[
+      {title:'1. Footwork — 10 min', items:['Avançar e recuar', 'Lateral direita/esquerda', 'Pivot']}
+    ]
+  };
+  
+  let list = blocks[blockKey] || [];
+  $('videoBlockContent').innerHTML = list.map(b=>`
+    <div class="info-section-box">
+      <h4>${b.title}</h4>
+      <ul style="margin:0 0 0 14px; padding:0; color:var(--m); font-size:12px;">
+        ${b.items.map(it=>`<li style="margin-bottom:3px;">${it}</li>`).join('')}
+      </ul>
+    </div>
+  `).join('');
+}
+
+function update(){
+  let u=currentUser(), goal=u.goalWeight||85, a=evals(), e=last(), rem=Math.max(0,e.w-goal);
+  let initialWeight = a.length > 0 ? a[0].w : 100.9;
+  let p=Math.max(0,Math.min(100,(initialWeight - e.w)/(initialWeight - goal)*100));
+  
+  $('dw').textContent=fmt(e.w)+' kg';
+  $('dwd').textContent=br(e.date);
+  $('targetWeightVal').textContent=fmt(goal)+' kg';
+  $('dr').textContent=fmt(rem)+' kg restantes';
+  $('dp').style.width=p+'%';
+  $('dpct').textContent=fmt(p,0)+'%';
+  $('dfat').textContent=e.f==null?'—':fmt(e.f)+'%';
+  $('dlean').textContent='massa magra '+(e.l==null?'—':fmt(e.l)+' kg');
+
+  let recent=a.filter(x=>x.date>= (a[0] ? a[0].date : '2026-04-01')), rate=null;
+  if(recent.length>1){
+    let s=recent[0], z=recent.at(-1), days=(new Date(z.date)-new Date(s.date))/864e5;
+    if(days>0) rate=(s.w-z.w)/(days/7);
+  }
+  $('drr').textContent=rate==null?'—':(rate>=0?'−':'+')+fmt(Math.abs(rate))+' kg/sem';
+  $('sc').textContent=fmt(initialWeight-e.w)+' kg';
+  $('sr').textContent=rate==null?'—':(rate>=0?'−':'+')+fmt(Math.abs(rate))+' kg/sem';
+  $('srem').textContent=fmt(rem)+' kg';
+
+  let forecast='Próximos meses';
+  if(rate>0&&rem>0){
+    let d=new Date(e.date);
+    d.setDate(d.getDate()+Math.ceil(rem/rate*7));
+    forecast=d.toLocaleDateString('pt-BR',{month:'short',year:'numeric'}).replace('.','');
+  }
+  $('df').textContent=forecast;
+  $('sf').textContent=forecast;
+  $('status').textContent=rate==null?'Aguardando avaliações.':rate>=.4&&rate<=.7?'🟢 Na meta de ritmo.':'🟡 Ritmo ajustável.';
+}
+
+function chart(){
+  let el=$('chart'), a=evals(), W=900, Hh=320, p=60;
+  let goal = currentUser().goalWeight || 85;
+  if(!a.length) return;
+  
+  let firstDate = a[0].date, lastDate = a.at(-1).date;
+  let weights = a.map(q=>q.w); weights.push(goal);
+  let minW = Math.min(...weights) - 2, maxW = Math.max(...weights) + 2;
+  
+  let x = d => p + (W - 2*p) * ((new Date(d) - new Date(firstDate)) / Math.max(1, (new Date(lastDate) - new Date(firstDate))));
+  let y = w => p/2 + (Hh - p) * (maxW - w) / (maxW - minW);
+  
+  let meta = [], totalDaysSpan = Math.max(30, (new Date(lastDate) - new Date(firstDate)) / 864e5);
+  for(let i=0; i <= totalDaysSpan / 7; i++){
+    let d = new Date(firstDate+'T12:00:00'); d.setDate(d.getDate() + i*7);
+    meta.push([x(d.toISOString().slice(0,10)), y(a[0].w - 0.5*i)]);
+  }
+  let real = a.map(q => [x(q.date), y(q.w)]);
+  let path = q => q.map((z,i) => (i?'L':'M') + z[0] + ' ' + z[1]).join(' ');
+
+  el.innerHTML = `
+    <svg viewBox="0 0 ${W} ${Hh}" preserveAspectRatio="none" style="width:100%; height:100%;">
+      <line x1="${p}" y1="${Hh-35}" x2="${W-p}" y2="${Hh-35}" stroke="#91a0ad" stroke-width="2" />
+      <path d="${path(meta)}" fill="none" stroke="#ffc857" stroke-width="2" stroke-dasharray="4 4"/>
+      <path d="${real.length > 1 ? path(real) : ''}" fill="none" stroke="#64e6a8" stroke-width="3"/>
+      ${real.map(q => `<circle cx="${q[0]}" cy="${q[1]}" r="5" fill="#62b5ff" />`).join('')}
+    </svg>`;
+}
+
+const days=['Segunda • Faculdade','Terça • Muay Thai + bike','Quarta • Boxe + bike','Quinta • Muay Thai + bike','Sexta • Faculdade','Sábado • treino 90 min','Domingo • força + técnica'];
+const meal=`<div class="meal"><b>☀️ Café</b><span>30 g whey + fruta</span></div><div class="meal"><b>🍛 Almoço</b><span>80 g arroz + 80 g feijão + 100 g proteína + legumes</span></div><div class="meal"><b>☕ Lanche</b><span>Fruta / 2 ovos</span></div><div class="meal"><b>🌙 Jantar</b><span>80 g arroz + 80 g feijão + 100 g proteína + vegetais</span></div>`;
+$('menu').innerHTML=days.map((d,i)=>`<div class="food"><h3>${d}</h3>${meal}</div>`).join('');
+
+function collectData(){
+  const us=users(), packs={};
+  us.forEach(u=>{
+    packs[u.id]={ evaluations:get(K.e+'_'+u.id, u.id==='kevin'?seed:[]), trainings:get(K.t+'_'+u.id,[]), meals:get(K.m+'_'+u.id,{}), diary:get(K.d+'_'+u.id,{}), mealObs:get(K.mo+'_'+u.id,{}) };
+  });
+  return {app:"Saúde Assistida",version:8,exportedAt:new Date().toISOString(),currentUser:currentUser().id,users:us,data:packs};
+}
+
+function saveBackup(){
+  const data=collectData();
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a"); a.href=url; a.download=`saude-assistida-${today()}.json`;
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+
+function exportJSON(){ saveBackup(); }
+
+function importJSON(event){
+  const file=event.target.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(){
+    try{
+      const obj=JSON.parse(reader.result);
+      if(!obj || !Array.isArray(obj.users) || !obj.data) throw new Error();
+      if(!confirm('Substituir dados atuais?')) return;
+      set(K.u,obj.users);
+      Object.entries(obj.data).forEach(([id,p])=>{
+        set(K.e+'_'+id,p.evaluations||[]); set(K.t+'_'+id,p.trainings||[]); set(K.m+'_'+id,p.meals||{}); set(K.d+'_'+id,p.diary||{}); set(K.mo+'_'+id,p.mealObs||{});
+      });
+      localStorage.setItem('sa_current_user',obj.currentUser||obj.users[0].id);
+      refresh(); alert('Importado com sucesso!');
+    }catch(e){alert('Arquivo inválido.');}
+    event.target.value='';
+  };
+  reader.readAsText(file);
+}
+
+function refresh(){ renderUsers(); renderE(); renderT(); renderMeals(); update(); chart(); }
+
+$('td').value=today(); $('ed').value=today();
+function tick(){$('clock').textContent=new Date().toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})}
+tick();setInterval(tick,1000);
+refresh(); switchVideoBlock('sabado');
+</script>
+</body>
+</html>
